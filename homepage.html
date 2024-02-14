@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Coupon Recommendation System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body ng-controller="myController">
+    <div class="main-div">
+        Coupon Recommendation System
+    </div>
+    <div class="content-div">
+        <div ng-if="customerDetails">
+            <div class="form-header-div">
+                Enter Customer Details:
+            </div>
+            <div class="form-div">
+                <form ng-submit="submitForm()">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" ng-model="formData.name" required>
+
+                    <label for="destination">Destination:</label>
+                    <select id="destination" ng-model="formData.destination" required>
+                        <option value="Work">Work</option>
+                        <option value="Home">Home</option>
+                        <option value="No Urgent Place">No Urgent Place</option>
+                    </select>
+
+                    <label for="passenger">Passenger Travelling with:</label>
+                    <select id="passenger" ng-model="formData.passenger" required>
+                        <option value="Alone">Alone</option>
+                        <option value="Partner">Partner</option>
+                        <option value="Friend(s)">Friend(s)</option>
+                        <option value="Kid(s)">Kid(s)</option>
+                    </select>
+
+                    <label for="age">Age:</label>
+                    <input type="text" id="age" ng-model="formData.age" required>
+
+                    <label for="maritalStatus">Marital Status:</label>
+                    <select id="maritalStatus" ng-model="formData.maritalStatus" required>
+                        <option value="Single">Single</option>
+                        <option value="Married partner">Married partner</option>
+                        <option value="Unmarried partner">Unmarried partner</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+
+                    <label for="hasChildren">Do you have children?</label>
+                    <input type="checkbox" id="hasChildren" ng-model="formData.hasChildren">
+
+                    <label for="bar">How many times do you go to a bar every month:</label>
+                    <select id="bar" ng-model="formData.bar" required>
+                        <option value="never">Never</option>
+                        <option value="less1">Less than 1</option>
+                        <option value="1~3">1 to 3</option>
+                        <option value="4~8">4 to 8</option>
+                        <option value="gt8">greater than 8</option>
+                    </select>
+
+                    <label for="coffeeHouse">How many times do you go to a Coffee House every month:</label>
+                    <select id="coffeeHouse" ng-model="formData.coffeeHouse" required>
+                        <option value="never">Never</option>
+                        <option value="less1">Less than 1</option>
+                        <option value="1~3">1 to 3</option>
+                        <option value="4~8">4 to 8</option>
+                        <option value="gt8">greater than 8</option>
+                    </select>
+
+                    <label for="carryAway">How many times do you get take-away food every month:</label>
+                    <select id="carryAway" ng-model="formData.carryAway" required>
+                        <option value="never">Never</option>
+                        <option value="less1">Less than 1</option>
+                        <option value="1~3">1 to 3</option>
+                        <option value="4~8">4 to 8</option>
+                        <option value="gt8">greater than 8</option>
+                    </select>
+
+                    <label for="restaurantLess20">How many times do you go to a restaurant with an average expense per
+                        person of less than $20 every month:</label>
+                    <select id="restaurantLess20" ng-model="formData.restaurantLess20" required>
+                        <option value="never">Never</option>
+                        <option value="less1">Less than 1</option>
+                        <option value="1~3">1 to 3</option>
+                        <option value="4~8">4 to 8</option>
+                        <option value="gt8">greater than 8</option>
+                    </select>
+
+                    <label for="restaurant20To50">How many times do you go to a restaurant with average
+                        expense per person of $20 - $50 every month:</label>
+                    <select id="restaurant20To50" ng-model="formData.restaurant20To50" required>
+                        <option value="never">Never</option>
+                        <option value="less1">Less than 1</option>
+                        <option value="1~3">1 to 3</option>
+                        <option value="4~8">4 to 8</option>
+                        <option value="gt8">greater than 8</option>
+                    </select>
+
+                    <button class="btn btn-primary" type="submit">Get reccomendations</button>
+                </form>
+            </div>
+        </div>
+        <div class="container" ng-show="result">
+            <div class="row">
+                <div class="col-lg-6 result-div">
+                    <div class="show-result-div">
+                        The Following coupons can be offered to customer:
+                    </div>
+                    <div class="result-row">
+                        <table>
+                            <thead>
+                              <tr>
+                                <th>Coupon For</th>
+                                <th>Expiration Time</th>
+                                <th>Time to Travel > 15 min</th>
+                                <th>Time to Travel > 25 min</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="coupon in resultList">
+                                <td>{{ coupon.type }}</td>
+                                <td>{{ coupon.expiration }}</td>
+                                <td>{{ coupon.dist15 ? 'Yes' : 'No' }}</td>
+                                <td>{{ coupon.dist25 ? 'Yes' : 'No' }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <canvas id="myChart"></canvas>
+                    <canvas id="myChart2"></canvas>
+                </div>
+            </div>
+            <div class="back-button">
+                <button type="button" class="btn btn-secondary" ng-click="back()">Back</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>

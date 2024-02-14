@@ -1,0 +1,64 @@
+.message {
+  display: none;
+  font-weight: bold;
+}
+
+.show-message {
+  display: block !important;
+}
+
+canvas {
+  max-width: 600px;
+}
+
+.main-div {
+  text-align: center;
+  font: 3em sans-serif;
+}
+
+body {
+  background-color: lightblue;
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+form input,
+form select,
+form textarea {
+  display: block;
+  width: 20%;
+  margin-bottom: 10px;
+}
+
+.form-div {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.form-header-div {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.content-div {
+  margin: 20px;
+}
+
+.back-button{
+  margin:20px;
+  padding: 10px;
+}
+.result-div{
+  padding: 10px;
+}
+.show-result-div{
+  font-weight: bold;
+  font-size: 20px;
+}
+.result-row{
+  padding: 10px;
+  margin: 10px;
+}
